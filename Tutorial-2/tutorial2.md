@@ -222,7 +222,7 @@ array as though it had 2 dimensions.  For example,
 yvals[:, np.newaxis].shape
 ```
 
-should show `(200,1)` -- numpy is treating it like a 2-d array.  The
+should show `(201,1)` -- numpy is treating it like a 2-d array.  The
 fancy thing is that that `np.newaxis` dimension will _broadcast_ to
 the size needed to operate with another array: if you write
 
@@ -289,7 +289,7 @@ fig.colorbar(s)
 
 ```
 fig,ax = plt.subplots()
-pvals = my_potential(xvals[np.newaxis,:], ygrid[:,np.newaxis])
+pvals = my_potential(xvals[np.newaxis,:], yvals[:,np.newaxis])
 im = ax.imshow(pvals)
 fig.colorbar(im)
 ```
