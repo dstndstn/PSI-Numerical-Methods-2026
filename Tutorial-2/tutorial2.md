@@ -247,27 +247,37 @@ and then `pvals` will be a 2-d array.
 1. Describe what `meshgrid` does.  If we run this,
 
 ```
-my_x = np.array([1,2,3])
+my_x = np.array([10,20,30])
 my_y = np.array([4,5])
 mesh_x, mesh_y = np.meshgrid(my_x, my_y)
 ```
 
 then what are the _shapes_ and _values_ in `mesh_x` and `mesh_y`?
 
-2. Copy-n-paste in the code snippets above.  What are the _shapes_ of
+2. Experiment with fancy indexing and broadcasting a bit.  What do these commands produce?  What are the shapes and contents of the results?
+
+```
+my_x[:,np.newaxis] + my_y[np.newaxis,:]
+```
+
+```
+my_x[np.newaxis,:] + my_y[:,np.newaxis]
+```
+
+3. Copy-n-paste in the code snippets above.  What are the _shapes_ of
 `xvals`, `yvals`, `xgrid`, `ygrid`, `pgrid`, and `pvals`?
 Approximately how much memory do these variables use?
 
-3. Modify your `time_func` from above to handle two arguments, and try
+4. Modify your `time_func` from above to handle two arguments, and try
 timing these two versions.  Is one of them faster than the other?  You
 may need to increase the array sizes to be able to measure the
 differences.
 
-4. Notice how I arranged the `:` and `np.newaxis` indices for the
+5. Notice how I arranged the `:` and `np.newaxis` indices for the
 `xvals` and `yvals` arrays.  Why did I choose that order?  What shape
 is the output?  What happens if you switch the orders?
 
-5. Try two different ways of plotting these 2-d arrays:
+6. Try two different ways of plotting these 2-d arrays:
 
 ```
 fig,ax = plt.subplots()
@@ -287,7 +297,7 @@ fig.colorbar(im)
 What happens if you try to increase the sizes of `xgrid` and `ygrid`
 to, say, 1000?
 
-6. Notice that the `imshow`---which tell matplotlib to treat the array as
+7. Notice that the `imshow`---which tell matplotlib to treat the array as
 an image---plots it with `y=0` at the _top_ of the plot.  Look at the
 `imshow` documentation and see if you can figure out how to make it
 put `y=0` at the bottom of the plot.  Which axes of the array is
@@ -295,7 +305,7 @@ matplotlib plotting on the horizontal and vertical?  (It may help to
 `imshow` an array with very different sizes -- eg,
 `ax.imshow(np.zeros((10, 20))`.
 
-7. Finally, notice that `imshow` is setting the axis ranges to the _size_
+8. Finally, notice that `imshow` is setting the axis ranges to the _size_
 of the `pvals` array, but we would really like the axis tick marks to
 correspond to the values in `xvals` and `yvals`.  See if you can find
 in the `imshow` documentation how to set the _extent_ of the plot.
