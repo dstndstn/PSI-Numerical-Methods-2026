@@ -1,6 +1,6 @@
 # PSI Numerical Methods 2026 - Tutorial 2
 
-Today we're going to look at some Numpy basics, timing code, complexity, and Matplotlib plots.
+Today we're going to look at some Numpy basics, timing code, and Matplotlib plots.
 
 ## Numpy arrays
 
@@ -84,7 +84,7 @@ Notice that we're passing _the function_ and _an argument_ to the
 `time_it` function, and then `time_it` is actually calling the
 function.
 
-### Task:
+### Tasks:
 
 Create a new Jupyter notebook and copy-n-paste in the code snippets
 above.  You'll also need to put at the top of your notebook some imports:
@@ -95,8 +95,8 @@ import time
 import matplotlib.pyplot as plt
 ```
 
-1. Predict which of the functions above is going to be fastest.
-2. Time how long it takes to run each of the four functions above, for `N` values
+1. Predict which of the functions above (`list_rand`, `append_rand`, `alloc_rand`, or `numpy_rand` is going to be fastest.
+2. Time how long it takes to run each of the four functions above, for different `N` values
 up to, say, `100000`.
 3. Plot how long each function takes with respect to `N`.  In your plot, put labels on the
 axes, given the plot a title, and create a legend.
@@ -129,12 +129,41 @@ near_four: [False False False  True  True  True False False False]
 x[near_four]: [3 4 5]
 ```
 
-### Task:
+That is: `x[near_four]` is pulling out only the elements in `x` where
+`near_four` is `True`.  Note that `x` and `near_four` need to have the
+_same shape_ for this to work.
 
-1. Draw two arrays, `x` and `y`, containing `100000` random points each,
+Another way of indexing numpy array is to create an array of
+_integers_ giving the _indices_ into the array that you want to pull
+out.  For example, here I'm creating array `x` containing the squared
+values, and then indexing it with an integer array:
+
+```
+x = np.arange(9)**2
+print('x:', x)
+some_indices = np.array([3, 4, 5])
+print('some_indices:', some_indices)
+print('x[some_indices]:', x[some_indices])
+```
+
+This will print:
+
+```
+x: [ 0  1  4  9 16 25 36 49 64]
+some_indices: [3 4 5]
+x[some_indices]: [ 9 16 25]
+```
+
+Note that `some_indices` is _not_ the same shape as `x`; but the
+resulting `x[some_indices]` array will have the same length as
+`some_indices`.
+
+### Tasks:
+
+1. Create two arrays, `x` and `y`, containing `100000` random points each,
 and plot them as dots in a 2-d plot.
-2. Use boolean indexing live the above to plot just the `x` and `y` points where
-`y > x` and the point `(x,y)` has distance greater than 3 from the origin.
+2. Use boolean indexing like given above to plot just the `x` and `y` points where
+`y > x`, and the point `(x,y)` has distance greater than 3 from the origin.
 3. Make a 2-d histogram of the `x` and `y` points.
 
 ## Numpy broadcasting and plotting images
@@ -215,20 +244,30 @@ and then `pvals` will be a 2-d array.
 
 ### Tasks
 
-1. Copy-n-paste in the code snippets above.  What are the _shapes_ of
+1. Describe what `meshgrid` does.  If we run this,
+
+```
+my_x = np.array([1,2,3])
+my_y = np.array([4,5])
+mesh_x, mesh_y = np.meshgrid(my_x, my_y)
+```
+
+then what are the _shapes_ and _values_ in `mesh_x` and `mesh_y`?
+
+2. Copy-n-paste in the code snippets above.  What are the _shapes_ of
 `xvals`, `yvals`, `xgrid`, `ygrid`, `pgrid`, and `pvals`?
 Approximately how much memory do these variables use?
 
-2. Modify your `time_func` from above to handle two arguments, and try
+3. Modify your `time_func` from above to handle two arguments, and try
 timing these two versions.  Is one of them faster than the other?  You
 may need to increase the array sizes to be able to measure the
 differences.
 
-3. Notice how I arranged the `:` and `np.newaxis` indices for the
+4. Notice how I arranged the `:` and `np.newaxis` indices for the
 `xvals` and `yvals` arrays.  Why did I choose that order?  What shape
 is the output?  What happens if you switch the orders?
 
-4. Try two different ways of plotting these 2-d arrays:
+5. Try two different ways of plotting these 2-d arrays:
 
 ```
 fig,ax = plt.subplots()
@@ -248,7 +287,7 @@ fig.colorbar(im)
 What happens if you try to increase the sizes of `xgrid` and `ygrid`
 to, say, 1000?
 
-Notice that the `imshow`---which tell matplotlib to treat the array as
+6. Notice that the `imshow`---which tell matplotlib to treat the array as
 an image---plots it with `y=0` at the _top_ of the plot.  Look at the
 `imshow` documentation and see if you can figure out how to make it
 put `y=0` at the bottom of the plot.  Which axes of the array is
@@ -256,7 +295,7 @@ matplotlib plotting on the horizontal and vertical?  (It may help to
 `imshow` an array with very different sizes -- eg,
 `ax.imshow(np.zeros((10, 20))`.
 
-Finally, notice that `imshow` is setting the axis ranges to the _size_
+7. Finally, notice that `imshow` is setting the axis ranges to the _size_
 of the `pvals` array, but we would really like the axis tick marks to
 correspond to the values in `xvals` and `yvals`.  See if you can find
 in the `imshow` documentation how to set the _extent_ of the plot.
