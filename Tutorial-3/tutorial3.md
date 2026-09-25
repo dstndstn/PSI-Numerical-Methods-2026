@@ -68,9 +68,10 @@ the part we don't need.
 
 ## Task:
 
-Write the semi-implicit Euler method.  This might be a bit messy
-because of the packing and unpacking of position and velocity
-components in our `x` vector and the `x_next` result.
+Write a semi-implicit Euler step function that works for the Newton
+problem.  This might be a bit messy because you will have to pack and
+unpack the positions and velocities from the `x` vector and the
+`x_next` result.  You can assume those are 3-vectors.
 
 Once you've got that working, test it for the same Newton problem that
 we ran RK4 on above.  You should find that the results are *stable*
@@ -83,12 +84,6 @@ the kinetic, potential, and total energy.
 Is the energy constant?
 
 Does the simulation look stable?
-
-Also, observe that Semi-implicit Euler still has much worse error
-properties than RK4, until things go off the rails for RK4.  In the
-notebook, I added a plot about the error performance of the different
-step functions, on the Simple Harmonic Oscillator problem.  Try adding
-your Semi-implicit Euler to that.  How does it compare?
 
 ## Symplectic integrators
 
@@ -131,6 +126,13 @@ called *symplectic*.  It *turns out* that a symplectic algorithm is
 The semi-implicit Euler step is a *symplectic* algorithm!
 
 ## Extension Tasks:
+
+Observe that Semi-implicit Euler still has much worse error properties
+than RK4 (in the short term!).  In the notebook, I added a plot about
+the error performance of the different step functions, running on the
+Simple Harmonic Oscillator problem.  Modify (or make a new version of)
+your Semi-implicit Euler step function that can handle the SHO
+problem.  Run it and add it to the error plot.  How does it compare?
 
 In Semi-implicit Euler, we kind of arbitrarily decided to step in `v`
 first, and then `x`.  We could do it the other way around.  This would
