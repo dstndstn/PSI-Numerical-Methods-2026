@@ -110,8 +110,12 @@ combine those values to get our final estimate.
 
 As written in the Wikipedia article, the Yoshida algorithm produces a
 *series* of points, where each one *updates* the previous one -- so
-you will step from the initial `(q, p)` to `(q_1, p)` to `(q_1, p_1)`
-to `(q_2, p_1)`, ... to `(q_4, p_3)`, which is what you'll return.
+you will step from the initial passed-in `(q, p)` to `(q_1, p)` to
+`(q_1, p_1)` to `(q_2, p_1)`, ... to `(q_4, p_3)`, which is what
+you'll return.
+
+(Note, the algorithm below calls the initial passed-in `(q, p)` values
+`(q_i, p_i)`.)
 
 Let's start by rewriting the Wikipedia algorithm in terms of the
 Hamiltonian: their `x` variables become our `q`, their `v` become our
@@ -121,11 +125,11 @@ acceleration `a` is our `pdot` function:
 
 ```math
 \begin{eqnarray}
-dq   &=& \frac{\partial H}{\partial p} |_{p_i} = \dot{q}(q, p_i)\\
+dq   &=& \frac{\partial H}{\partial p} |_{p_i} = \dot{q}(q_i, p_i)\\
 q_1  &=& q_i + c_1 \, dq \, h \\
-dp   &=& -\frac{\partial H}{\partial q} |_{q_1} \\
+dp   &=& -\frac{\partial H}{\partial q} |_{q_1} = \dot{p}(q_1, p_i) \\
 p_1  &=& p_i + d_1 \, dp \, h \\
-dq_1 &=& \frac{\partial H}{\partial p} |_{p_1} \\
+dq_1 &=& \frac{\partial H}{\partial p} |_{p_1} = \dot{q}(q_1, p_1) \\
 q_2  &=& q_1 + c_2 \, dq_1 \, h \\
 ...  & & \\
 p_3  &=& ... \\
