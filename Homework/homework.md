@@ -78,8 +78,7 @@ def dHdp(t, q, p, **dH_kwargs):
 ```
 
 I rewrote our `evolve()`, `step_forward_euler()`, `step_midpoint()`,
-`step_rk4()`, and the `dHdp_sho()` and `dHdq_sho()` functions for the
-simple Harmonic oscillator, in the notebook that you'll find in the
+and `step_rk4()` functions, in the notebook that you'll find in the
 same directory as this document.  Please feel free to use that
 notebook as the starting point for your assignment.
 
@@ -119,14 +118,14 @@ values, we're going to call our Hamiltonian `dHdp` function; their
 acceleration `a` is our `-dHdq` function:
 
 ```math
-dq = \frac{\partial H}{\partial p} |_{p_i}
-q_1 = q_i + c_1 dq h
-dp = -\frac{\partial H}{\partial q} |_{q_1}
-p_1 = p_i + d_1 dp h
-dq_1 = \frac{\partial H}{\partial p} |_{p_1}
-q_2 = q_1 + c_2 dq_1 h
-...
-p_3 = ...
+dq = \frac{\partial H}{\partial p} |_{p_i} \\
+q_1 = q_i + c_1 dq h \\
+dp = -\frac{\partial H}{\partial q} |_{q_1} \\
+p_1 = p_i + d_1 dp h \\
+dq_1 = \frac{\partial H}{\partial p} |_{p_1} \\
+q_2 = q_1 + c_2 dq_1 h \\
+... \\
+p_3 = ... \\
 q_4 = ...
 ```
 
