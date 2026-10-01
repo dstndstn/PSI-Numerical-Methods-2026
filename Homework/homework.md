@@ -87,7 +87,7 @@ Newtonian gravity (Solar system orbit) problem, like the function we
 called `f_newton_onebody()`.  The Hamiltonian for this problem is
 
 ```math
-H(q, p) = \frac{p^2}{2 m} - \frac{G M m}{\norm{q}}
+H(q, p) = \frac{p^2}{2 m} - \frac{G M m}{\lVert q \rVert}
 ```
 
 where we will use `q` for position and `p` for momentum; so your
@@ -118,15 +118,17 @@ values, we're going to call our Hamiltonian `dHdp` function; their
 acceleration `a` is our `-dHdq` function:
 
 ```math
-dq = \frac{\partial H}{\partial p} |_{p_i} \\
-q_1 = q_i + c_1 dq h \\
-dp = -\frac{\partial H}{\partial q} |_{q_1} \\
-p_1 = p_i + d_1 dp h \\
-dq_1 = \frac{\partial H}{\partial p} |_{p_1} \\
-q_2 = q_1 + c_2 dq_1 h \\
-... \\
-p_3 = ... \\
-q_4 = ...
+\begin{eqnarray}
+dq   &=& \frac{\partial H}{\partial p} |_{p_i} \\
+q_1  &=& q_i + c_1 dq h \\
+dp   &=& -\frac{\partial H}{\partial q} |_{q_1} \\
+p_1  &=& p_i + d_1 dp h \\
+dq_1 &=& \frac{\partial H}{\partial p} |_{p_1} \\
+q_2  &=& q_1 + c_2 dq_1 h \\
+...  & & \\
+p_3  &=& ... \\
+q_4  &=& ... \\
+\end{eqnarray}
 ```
 
 The first part of my implementation of the Yoshida algorithm looks
