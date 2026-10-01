@@ -120,11 +120,11 @@ acceleration `a` is our `-dHdq` function:
 ```math
 \begin{eqnarray}
 dq   &=& \frac{\partial H}{\partial p} |_{p_i} \\
-q_1  &=& q_i + c_1 dq h \\
+q_1  &=& q_i + c_1 \, dq \, h \\
 dp   &=& -\frac{\partial H}{\partial q} |_{q_1} \\
-p_1  &=& p_i + d_1 dp h \\
+p_1  &=& p_i + d_1 \, dp \, h \\
 dq_1 &=& \frac{\partial H}{\partial p} |_{p_1} \\
-q_2  &=& q_1 + c_2 dq_1 h \\
+q_2  &=& q_1 + c_2 \, dq_1 \, h \\
 ...  & & \\
 p_3  &=& ... \\
 q_4  &=& ... \\
@@ -152,6 +152,7 @@ def step_yoshida(t, q, p, h, dHdp, dHdq, dH_kwargs):
     t1 = t + c1 * h
     # call dHdq to get the (negative) "p-dot" derivative
     dp1 = -dHdq(t1, q1, p, **dH_kwargs)
+    # update the momentum
     p1 = p + d1 * dp1 * h
     # ....
     return q4, p3
