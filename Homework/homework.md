@@ -50,10 +50,11 @@ Hamiltonian mechanics.
 
 Specifically, instead of creating an `f(t, x)` function that returns
 the time derivative of the general vector `x`, we will create *two*
-functions, which we'll call `dHdq` and `dHdp`, the partial derivatives
-of the Hamiltonian, with respect to position `q` and momentum `p`.
+functions, which we'll call `qdot` and `pdot`, which compute the time
+derivatives of the position `q` and momentum `p`.
 
-In Hamiltonian mechanics, we have
+In Hamiltonian mechanics, these time derivatives are equal to partial
+derivatives of the Hamiltonian function:
 
 ```math
 \dot{q} = \frac{\partial H}{\partial p}
@@ -68,13 +69,13 @@ and
 so where before we set up `f(t, x, **f_kwargs)`, now we will have two
 functions,
 ```python
-def dHdq(t, q, p, **dH_kwargs):
+def qdot(t, q, p, **dH_kwargs):
     # ...
-    return dhdq
+    return # time derivative of position q
 
-def dHdp(t, q, p, **dH_kwargs):
+def pdot(t, q, p, **dH_kwargs):
     # ...
-    return dhdp
+    return # time derivative of momentum p
 ```
 
 I rewrote our `evolve()`, `step_forward_euler()`, `step_midpoint()`,
@@ -82,20 +83,20 @@ and `step_rk4()` functions, in the notebook that you'll find in the
 same directory as this document.  Please feel free to use that
 notebook as the starting point for your assignment.
 
-You will have to write the `dHdp` and `dHdq` functions for the
-Newtonian gravity (Solar system orbit) problem, like the function we
-called `f_newton_onebody()`.  The Hamiltonian for this problem is
+You will have to write the `qdot` and `pdot` functions for the "Kepler
+problem" (Newtonian gravity / Solar system orbits), like the function
+we called `f_newton_onebody()`.  The Hamiltonian for this problem is
 
 ```math
 H(q, p) = \frac{p^2}{2 m} - \frac{G M m}{\lVert q \rVert}
 ```
 
 where we will use `q` for position and `p` for momentum; so your
-`dHdp` function should look a lot like the derivative-of-position part
-of `f_newton_onebody()` and the `dHdq` function should look a lot like
+`qdot` function should look a lot like the derivative-of-position part
+of `f_newton_onebody()` and the `pdot` function should look a lot like
 the derivative-of-velocity part of `f_newton_onebody()`.  For the
 Newtonian gravity problem, both these functions should return a
-length-3 vector.
+length-3 vector (Cartesian $x,y,z$ positions or momenta).
 
 ### The Yoshida integrator
 
@@ -109,17 +110,18 @@ combine those values to get our final estimate.
 
 As written in the Wikipedia article, the Yoshida algorithm produces a
 *series* of points, where each one *updates* the previous one -- so
-you will step from `x_1` to `x_2`.
+you will step from the initial `(q, p)` to `(q_1, p)` to `(q_1, p_1)`
+to `(q_2, p_1)`, ... to `(q_4, p_3)`, which is what you'll return.
 
 Let's start by rewriting the Wikipedia algorithm in terms of the
 Hamiltonian: their `x` variables become our `q`, their `v` become our
 `p`, and when we're updating `q`, instead of just using the `v`
-values, we're going to call our Hamiltonian `dHdp` function; their
-acceleration `a` is our `-dHdq` function:
+values, we're going to call our Hamiltonian `dqot` function; their
+acceleration `a` is our `pdot` function:
 
 ```math
 \begin{eqnarray}
-dq   &=& \frac{\partial H}{\partial p} |_{p_i} \\
+dq   &=& \frac{\partial H}{\partial p} |_{p_i} = \dot{q}(q, p_i)\\
 q_1  &=& q_i + c_1 \, dq \, h \\
 dp   &=& -\frac{\partial H}{\partial q} |_{q_1} \\
 p_1  &=& p_i + d_1 \, dp \, h \\
@@ -135,7 +137,7 @@ The first part of my implementation of the Yoshida algorithm looks
 like this:
 
 ```python
-def step_yoshida(t, q, p, h, dHdp, dHdq, dH_kwargs):
+def step_yoshida(t, q, p, h, qdot, pdot, H_kwargs):
 
     # compute Yoshida coefficients
     x0 = -2**(1/3) / (2 - 2**(1/3))
@@ -145,13 +147,13 @@ def step_yoshida(t, q, p, h, dHdp, dHdq, dH_kwargs):
     d1 = d3 = x1
     d2 = x0
 
-    # First Yoshida step: first call dHdp to get the "q-dot" derivative
-    dq1 =  dHdp(t, q, p, **dH_kwargs)
+    # First Yoshida step: first get the "q-dot" derivative
+    dq1 = qdot(t, q, p, **H_kwargs)
     # update the position
     q1 = q + dq1 * c1 * h
     t1 = t + c1 * h
-    # call dHdq to get the (negative) "p-dot" derivative
-    dp1 = -dHdq(t1, q1, p, **dH_kwargs)
+    # get the "p-dot" derivative at the new q1 position
+    dp1 = pdot(t1, q1, p, **H_kwargs)
     # update the momentum
     p1 = p + d1 * dp1 * h
     # ....
@@ -160,7 +162,7 @@ def step_yoshida(t, q, p, h, dHdp, dHdq, dH_kwargs):
 
 ### Your tasks:
 
-* write the `dHdp_kepler(t, q, p, GM=1., m=1.)` and `dHdq_kepler(t, q,
+* write the `qdot_kepler(t, q, p, GM=1., m=1.)` and `pdot_kepler(t, q,
   p, GM=1., m=1.)` functions for the Newtonian gravity problem.
 
 * write the `step_yoshida()` algorithm.
